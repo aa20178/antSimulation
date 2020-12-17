@@ -56,5 +56,21 @@ public final class ToricPosition {
 		
 	}
 
+	ToricPosition add(ToricPosition that)
+	{
+		
+		ToricPosition tpAddition =  new ToricPosition(position.add(that.position));
+		tpAddition.position = ToricPosition.clampedPosition(tpAddition.position.getX(), tpAddition.position.getY());
+		return tpAddition ;
+
+	}
+
+	Vec2d toVec2d()
+	{
+		
+	return this.position;
+
+	}
+
 
 }
