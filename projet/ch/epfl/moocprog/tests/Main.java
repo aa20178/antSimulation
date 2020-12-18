@@ -28,7 +28,25 @@ public class Main {
         ToricPosition tp6 = new ToricPosition(width/2, height/2);
         ToricPosition tp7 = tp4.add(tp6.add(new Vec2d(width/2, height/2)));
         ToricPosition tp8 = new ToricPosition(3, 4);
+        
+        ToricPosition tp9 = new ToricPosition(10, 650);
+        ToricPosition tp10 = new ToricPosition(10, 50);
+        Vec2d v22 = tp9.toricVector(tp10);
+
+        
+        ToricPosition outOfBoundsTP = new ToricPosition(3001, 2102);
+        ToricPosition outOfBoundsTP2 = new ToricPosition(-1, -1);
+        ToricPosition outOfBoundsTP3 = new ToricPosition(700, -1000);
+
+        System.out.println("Some tests for ToricPosition Clamping : 0<x<"+width + " & 0<y<"+ height);
+
+        System.out.println("OOB TP  : " + outOfBoundsTP);
+        System.out.println("OOB TP  : " +outOfBoundsTP2);
+        System.out.println("OOB TP  : " +outOfBoundsTP3);
+
         Vec2d v1 = tp2.toricVector(tp3);
+
+        
 
         System.out.println("Some tests for ToricPosition");
         System.out.println("Default toric position : " + tp1);
