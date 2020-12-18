@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public final class ToricPosition {
 	
-	private Vec2d position ; 
+	final private Vec2d position ; 
 	static int worldWidth = getConfig().getInt(WORLD_WIDTH) ; 
 	static int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
 	
@@ -35,7 +35,7 @@ public final class ToricPosition {
 			y = y + worldHeight ; 
 			
 		}
-		while(y> worldWidth  )
+		while(y> worldHeight  )
 		{
 			y = y - worldHeight ; 
 			
@@ -63,17 +63,16 @@ public final class ToricPosition {
 
 	public ToricPosition add(ToricPosition that)
 	{
-		
-		ToricPosition tpAddition =  new ToricPosition(position.add(that.position));
-		tpAddition.position = ToricPosition.clampedPosition(tpAddition.position.getX(), tpAddition.position.getY());
+		Vec2d v = position.add(that.position);
+		ToricPosition tpAddition =  new ToricPosition(v);
 		return tpAddition ;
 
 	}	
 	
 	public ToricPosition add(Vec2d that)
 	{
-		ToricPosition tpAddition = new ToricPosition(position.add(that));
-		tpAddition.position = ToricPosition.clampedPosition(position.getX(), position.getY());
+		Vec2d v = position.add(that);
+		ToricPosition tpAddition = new ToricPosition(v);
 		return tpAddition;
 
 	}
@@ -120,9 +119,22 @@ public final class ToricPosition {
 			}
 			
 		}
-		return TPtable[minimumIndex].position;
-		
+		// il faut retourner le vecteur qui correspond à la distance la plus courte 
+		return new Vec2d( TPtable[minimumIndex].position.getX()-this.position.getX() , TPtable[minimumIndex].position.getY()- this.position.getY() );//TPtable[minimumIndex].position;
 	}
+	
+	public double toricDistance(ToricPosition that)
+	{
+		return toricVector(that).length();
+	}
+	
+	public String toString()
+	{
+		return this.position.toString();
+	}
+	
+	
+	
 
 
 }
