@@ -61,16 +61,14 @@ public final class ToricPosition {
 
 	public ToricPosition add(ToricPosition that)
 	{
-		Vec2d v = position.add(that.position);
-		ToricPosition tpAddition =  new ToricPosition(v);
+		ToricPosition tpAddition =  new ToricPosition(position.add(that.toVec2d()));
 		return tpAddition ;
 
 	}	
 	
 	public ToricPosition add(Vec2d that)
 	{
-		Vec2d v = position.add(that);
-		ToricPosition tpAddition = new ToricPosition(v);
+		ToricPosition tpAddition =  new ToricPosition(position.add(that));
 		return tpAddition;
 
 	}
@@ -86,46 +84,36 @@ public final class ToricPosition {
 		 final int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
 		
 		//liste des points candidats
-		ToricPosition TPtable[] = new ToricPosition[9];
-		TPtable[0] =that;
-		
-		TPtable[1] = that.add(new Vec2d(0, worldHeight));
-		TPtable[2] = that.add(new Vec2d(0, -worldHeight));
-		
-		TPtable[3] = that.add(new Vec2d(worldWidth, 0));
-		TPtable[4] = that.add(new Vec2d(-worldWidth, 0));
-		
-		TPtable[5] = that.add(new Vec2d(worldWidth, worldHeight));
-		
-		TPtable[6] = that.add(new Vec2d(worldWidth, -worldHeight));
-		TPtable[7] = that.add(new Vec2d(-worldWidth, worldHeight));
-		TPtable[8] = that.add(new Vec2d(-worldWidth, -worldHeight));
+		Vec2d vecTable[] = new Vec2d[9];
+		vecTable[0] = that.toVec2d();
+		vecTable[1] = that.toVec2d().add(new Vec2d(0, worldHeight));		
+		vecTable[2]=that.toVec2d().add(new Vec2d(0, -worldHeight));
+		vecTable[3]=that.toVec2d().add(new Vec2d( worldHeight,0));
+		vecTable[4]=that.toVec2d().add(new Vec2d( -worldHeight,0));
+		vecTable[5]=that.toVec2d().add(new Vec2d( worldWidth, worldHeight));
+		vecTable[6]=that.toVec2d().add(new Vec2d( worldWidth, -worldHeight));
+
+		vecTable[7]=that.toVec2d().add(new Vec2d(- worldWidth, worldHeight));
+		vecTable[8]=that.toVec2d().add(new Vec2d( -worldWidth, -worldHeight));
 		
 		// liste des distances aux points candidats
-		double distanceTable[] = new double[9];
-		for (int i = 0; i < distanceTable.length ; ++i)
-		{
-			distanceTable[i] = this.position.distance(TPtable[i].position);
-		}
 		
-		double minimum = distanceTable[0];
-		int minimumIndex = 0;
-		
-		for (int i = 0; i < distanceTable.length ; ++i)
+		Vec2d vmin = vecTable[0];		
+		for(int i =0; i < vecTable.length; ++i)
 		{
-			if(distanceTable[i] < minimum)
+			if(this.toVec2d().distance(vecTable[i]) < this.toVec2d().distance(vmin))
 			{
-				minimum =distanceTable[i]  ;
-				minimumIndex = i ;
+				vmin = vecTable[i];
 			}
 			
 		}
-		
-		Vec2d shortestDistanceVector = new Vec2d( TPtable[minimumIndex].position.getX() - this.position.getX() , TPtable[minimumIndex].position.getY()- this.position.getY());
-		
-		// il faut retourner le vecteur qui correspond à la distance la plus courte 
-		return shortestDistanceVector ;//TPtable[minimumIndex].position;
+		return vmin.minus(position);
+
 	}
+		
+
+		
+		
 	
 	public double toricDistance(ToricPosition that)
 	{
