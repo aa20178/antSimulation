@@ -23,7 +23,7 @@ public final class ToricPosition {
 			x = x + worldWidth ; 
 			
 		}
-		while(x > worldWidth  )
+		while(x >= worldWidth  )
 		{
 			x = x - worldWidth ; 
 			
@@ -35,7 +35,7 @@ public final class ToricPosition {
 			y = y + worldHeight ; 
 			
 		}
-		while(y> worldHeight  )
+		while(y>= worldHeight  )
 		{
 			y = y - worldHeight ; 
 			
