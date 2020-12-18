@@ -10,15 +10,13 @@ import java.util.ArrayList;
 public final class ToricPosition {
 	
 	final private Vec2d position ; 
-	static int worldWidth = getConfig().getInt(WORLD_WIDTH) ; 
-	static int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
-	
+		
 	private static Vec2d clampedPosition(double x, double y)
 	{
-		int worldWidth = getConfig().getInt(WORLD_WIDTH) ; 
-		int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
+		 final int worldWidth = getConfig().getInt(WORLD_WIDTH) ; 
+		 final int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
 
-		while(x <0 )
+		while(x <0 )	
 		{
 			x = x + worldWidth ; 
 			
@@ -84,8 +82,11 @@ public final class ToricPosition {
 	
 	public Vec2d toricVector(ToricPosition that)
 	{	
-		ToricPosition TPtable[] = new ToricPosition[9];
+		final int worldWidth = getConfig().getInt(WORLD_WIDTH) ; 
+		 final int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
 		
+		//liste des points candidats
+		ToricPosition TPtable[] = new ToricPosition[9];
 		TPtable[0] =that;
 		
 		TPtable[1] = that.add(new Vec2d(0, worldHeight));
@@ -100,8 +101,8 @@ public final class ToricPosition {
 		TPtable[7] = that.add(new Vec2d(-worldWidth, worldHeight));
 		TPtable[8] = that.add(new Vec2d(-worldWidth, -worldHeight));
 		
+		// liste des distances aux points candidats
 		double distanceTable[] = new double[9];
-		
 		for (int i = 0; i < distanceTable.length ; ++i)
 		{
 			distanceTable[i] = this.position.distance(TPtable[i].position);
@@ -119,8 +120,11 @@ public final class ToricPosition {
 			}
 			
 		}
+		
+		Vec2d shortestDistanceVector = new Vec2d( TPtable[minimumIndex].position.getX() - this.position.getX() , TPtable[minimumIndex].position.getY()- this.position.getY());
+		
 		// il faut retourner le vecteur qui correspond à la distance la plus courte 
-		return new Vec2d( TPtable[minimumIndex].position.getX()-this.position.getX() , TPtable[minimumIndex].position.getY()- this.position.getY() );//TPtable[minimumIndex].position;
+		return shortestDistanceVector ;//TPtable[minimumIndex].position;
 	}
 	
 	public double toricDistance(ToricPosition that)
