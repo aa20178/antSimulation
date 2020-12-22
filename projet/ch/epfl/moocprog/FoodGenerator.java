@@ -1,6 +1,4 @@
 package ch.epfl.moocprog;
-
-
 import ch.epfl.moocprog.app.Context;
 import ch.epfl.moocprog.config.Config;
 
@@ -20,7 +18,7 @@ final public class FoodGenerator
 	}
 	
 
-	void update(FoodGeneratorEnvironmentView env, Time dt)
+	public void update(FoodGeneratorEnvironmentView env, Time dt)
 	{
 		final Time threshold = Context.getConfig().getTime(Config.FOOD_GENERATOR_DELAY) ; 
 		final double min = Context.getConfig().getDouble(Config.NEW_FOOD_QUANTITY_MIN);
