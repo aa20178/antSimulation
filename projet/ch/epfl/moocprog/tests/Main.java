@@ -14,6 +14,7 @@ import ch.epfl.moocprog.ToricPosition;
 import ch.epfl.moocprog.Environment;
 import ch.epfl.moocprog.Food;
 import ch.epfl.moocprog.Positionable;
+import ch.epfl.moocprog.Termite;
 public class Main {
 
     public static void main(String[] args) {
@@ -56,6 +57,17 @@ public class Main {
         System.out.println("Inital food quantities : " + env.getFoodQuantities());
         env.update(foodGenDelta);
         System.out.println("After update : " + env.getFoodQuantities());
+
+        
+        
+        System.out.println();
+        System.out.println ("A termite before update :");
+        Termite t1 = new Termite(new ToricPosition(20, 30));
+        System.out.println(t1);
+        env.addAnimal(t1);
+        env.update(Time.fromSeconds(1.));
+        System.out.println("The same termite after one update :");
+        System.out.println(t1);
 
     }
 }
