@@ -7,7 +7,7 @@ public final class Anthill extends Positionable
 		super(tp);		
 	}
 
-	 public double getFoodQuantity()
+	public double getFoodQuantity()
 	{
 		return 0.0;
 	}

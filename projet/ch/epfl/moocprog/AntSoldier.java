@@ -10,8 +10,14 @@ public final class AntSoldier extends Ant {
 
 	@Override
 	public void accept(AnimalVisitor visitor, RenderingMedia s) {
-		visitor.visit(this, s);
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public double getSpeed() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

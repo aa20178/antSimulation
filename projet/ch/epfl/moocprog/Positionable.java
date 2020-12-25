@@ -26,8 +26,6 @@ public class Positionable
 	{
 		tp  = position1;
 	}
-	
-	
 	public String toString()
 	{
 		return tp.toString();

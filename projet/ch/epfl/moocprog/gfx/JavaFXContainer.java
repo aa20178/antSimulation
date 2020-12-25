@@ -415,7 +415,6 @@ public final class JavaFXContainer extends javafx.application.Application {
 		});
 		Button zoomDown = new Button("-");
 
-		
 		zoomDown.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

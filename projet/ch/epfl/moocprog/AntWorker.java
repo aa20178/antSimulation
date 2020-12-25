@@ -13,4 +13,10 @@ public final class AntWorker extends Ant {
 		visitor.visit(this, s);
 	}
 
+	@Override
+	public double getSpeed() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

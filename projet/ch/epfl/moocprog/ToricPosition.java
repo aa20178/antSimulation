@@ -45,8 +45,8 @@ public final class ToricPosition {
 	public ToricPosition(double newx, double newy)
 	{
 		position = clampedPosition(newx, newy);
+		
 	}
-	
 	public ToricPosition(Vec2d newposition)
 	{
 		position = clampedPosition(newposition.getX() , newposition.getY());
