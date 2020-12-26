@@ -1,9 +1,7 @@
 package ch.epfl.moocprog;
 
 import static ch.epfl.moocprog.app.Context.getConfig;
-import static ch.epfl.moocprog.config.Config.WORLD_HEIGHT;
-import static ch.epfl.moocprog.config.Config.WORLD_WIDTH;
-
+import static ch.epfl.moocprog.config.Config.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,22 +11,30 @@ import ch.epfl.moocprog.gfx.EnvironmentRenderer;
 import ch.epfl.moocprog.utils.Time;
 import ch.epfl.moocprog.utils.Utils;
 
-public final class Environment implements FoodGeneratorEnvironmentView, AnimalEnvironmentView
+public final class Environment implements FoodGeneratorEnvironmentView, AnimalEnvironmentView, AnthillEnvironmentView, AntEnvironmentView, AntWorkerEnvironmentView
 {
 	
 	private FoodGenerator fg; 
 	private List<Food> foodlist;
 	private List<Animal> animals	;
-
-
+	private List<Anthill> anthills	;
 
 	public  Environment() 
 	{
 		fg = new FoodGenerator();
 		foodlist = new LinkedList<Food>();
 		animals = new LinkedList<Animal>();
-
+		anthills = new LinkedList<Anthill>();
 	}
+	
+	
+	public void  addAnthill(Anthill anthill)
+	{
+		Utils.requireNonNull(anthill);			
+		anthills.add(anthill);
+	}
+	
+	
 	
 	@Override
 	public void addFood(Food food) 
@@ -69,8 +75,7 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 			else
 				instanceDeUneClasse.update(this, dt);
 		}
-		
-		
+				
 		foodlist.removeIf(food -> food.getQuantity() <= 0);
 	}
 	
@@ -79,16 +84,13 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		foodlist.forEach(environmentRenderer::renderFood);
 		animals.forEach(environmentRenderer::renderAnimal);
 }
-	public void addAnthill(Anthill anthill)	{}
+
 	public void addAnimal(Animal animal)	
 	{
 		Utils.requireNonNull(animal);	
-		
 		this.animals.add(animal);
-		
 	}
-	
-	
+
 	public int getWidth()
 	{
 		return getConfig().getInt(WORLD_WIDTH) ; 
@@ -97,6 +99,75 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 	{
 		int worldHeight = getConfig().getInt(WORLD_HEIGHT) ; 
 		return worldHeight ; 
+	}
+
+
+	@Override
+	public void addAnt(Ant ant) throws IllegalArgumentException
+	{
+		Utils.requireNonNull(ant);	
+		this.addAnimal(ant);
+	}
+
+
+	@Override
+	public Food getClosestFoodForAnt(AntWorker antWorker) 
+	{
+		Food closeFood = Utils.closestFromPoint(antWorker, this.foodlist);
+		
+		double rayonPerception = getConfig().getDouble(ANT_MAX_PERCEPTION_DISTANCE);
+		
+		if (closeFood == null  ) 
+		{
+			return null;
+		}
+		
+		else if (closeFood.getPosition().toricDistance(antWorker.getPosition()) > rayonPerception)
+			return null;
+		
+		return closeFood;
+	}
+	
+	
+	protected Anthill getAnthillById(Uid selectedUid)
+	{
+		Utils.requireNonNull(selectedUid);
+		
+		Anthill fourmillierePresumee = null; 
+		
+		for (Anthill anth : this.anthills)
+		{
+			if (anth.getAnthillId().equals(selectedUid)) 
+			{
+				fourmillierePresumee = anth;
+			}
+		}
+		return fourmillierePresumee;
+		
+	}
+
+	
+	
+
+	@Override
+	public boolean dropFood(AntWorker antWorker)
+	{
+		Utils.requireNonNull(antWorker);	
+		double rayonPerception = getConfig().getDouble(ANT_MAX_PERCEPTION_DISTANCE);
+		Anthill ahill = getAnthillById(antWorker.getAnthillId());
+	
+		if ( ahill==null)
+		{
+			return false ;	
+		}
+		
+		else if(ahill.getPosition().toricDistance(antWorker.getPosition()) > rayonPerception )
+		{
+			return false;
+		}
+		
+		ahill.dropFood(antWorker.getFoodQuantity());
+		return true;
 	}
 
 }

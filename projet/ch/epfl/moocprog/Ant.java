@@ -2,12 +2,25 @@ package ch.epfl.moocprog;
 
 import ch.epfl.moocprog.utils.Time;
 
-public abstract class Ant extends Animal {
+public abstract class Ant extends Animal 
+{
+	private Uid antHillId;
 
-	public Ant(ToricPosition t) {
-		super(t,0,Time.ZERO);
-		// TODO Auto-generated constructor stub
+
+	
+	public Ant(ToricPosition t,int hitpoints, Time life, Uid nAntHillId) 
+	{
+		super(t,hitpoints,life);
+		antHillId = nAntHillId;
 	}
+	
+	final public Uid getAnthillId()
+	{
+		return this.antHillId;
+	}
+	
+	
+	
 
 
 
