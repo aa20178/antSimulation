@@ -2,6 +2,8 @@ package ch.epfl.moocprog;
 
 import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.*;
+
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;

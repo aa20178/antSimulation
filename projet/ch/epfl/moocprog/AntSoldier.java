@@ -1,7 +1,7 @@
 package ch.epfl.moocprog;
 
-import static ch.epfl.moocprog.app.Context.*;
 import static ch.epfl.moocprog.config.Config.*;
+import static ch.epfl.moocprog.app.Context.getConfig;
 
 import ch.epfl.moocprog.utils.Time;
 
@@ -14,16 +14,10 @@ public final class AntSoldier extends Ant {
 		// TODO Auto-generated constructor stub
 	}
 	
-
-	
-	
 	@Override
 	public void accept(AnimalVisitor visitor, RenderingMedia s) 
-	{
-		
+	{	
 	}
-	
-	
 
 	@Override
 	public double getSpeed() {
@@ -38,13 +32,10 @@ public final class AntSoldier extends Ant {
 	}
 
 
-
-
 	@Override
 	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) 
 	{
 		env.selectSpecificBehaviorDispatch(this,  dt);
 	}
 	
-
 }

@@ -1,9 +1,7 @@
 package ch.epfl.moocprog;
 
-import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.*;
-import static ch.epfl.moocprog.config.Config.TERMITE_HP;
-import static ch.epfl.moocprog.config.Config.TERMITE_LIFESPAN;
+import static ch.epfl.moocprog.app.Context.getConfig;
 
 import ch.epfl.moocprog.utils.Time;
 

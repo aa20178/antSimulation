@@ -1,8 +1,8 @@
 package ch.epfl.moocprog;
 
 
-import ch.epfl.moocprog.app.Context;
-import ch.epfl.moocprog.config.Config;
+import static ch.epfl.moocprog.config.Config.*;
+import static ch.epfl.moocprog.app.Context.getConfig;
 
 import ch.epfl.moocprog.random.NormalDistribution;
 import ch.epfl.moocprog.random.UniformDistribution;
@@ -22,12 +22,12 @@ final public class FoodGenerator
 
 	public void update(FoodGeneratorEnvironmentView env, Time dt)
 	{
-		final Time threshold = Context.getConfig().getTime(Config.FOOD_GENERATOR_DELAY) ; 
-		final double min = Context.getConfig().getDouble(Config.NEW_FOOD_QUANTITY_MIN);
-		final double max = Context.getConfig().getDouble(Config.NEW_FOOD_QUANTITY_MAX);
+		final Time threshold = getConfig().getTime(FOOD_GENERATOR_DELAY) ; 
+		final double min = getConfig().getDouble(NEW_FOOD_QUANTITY_MIN);
+		final double max = getConfig().getDouble(NEW_FOOD_QUANTITY_MAX);
 		
-		final int taillex =Context.getConfig().getInt(Config.WORLD_WIDTH);
-		final int tailley =Context.getConfig().getInt(Config.WORLD_WIDTH);
+		final int taillex =getConfig().getInt(WORLD_WIDTH);
+		final int tailley =getConfig().getInt(WORLD_WIDTH);
 
 		this.time = this.time.plus(dt);
 		

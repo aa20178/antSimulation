@@ -6,11 +6,9 @@ import ch.epfl.moocprog.utils.Vec2d;
 import ch.epfl.moocprog.random.NormalDistribution;
 import ch.epfl.moocprog.random.UniformDistribution;
 
-import ch.epfl.moocprog.config.Config;
-import ch.epfl.moocprog.app.Context;
 
 import static ch.epfl.moocprog.config.Config.*;
-import static ch.epfl.moocprog.app.Context.*;
+import static ch.epfl.moocprog.app.Context.getConfig;
 
 public abstract class Animal extends Positionable 
 {
@@ -84,7 +82,7 @@ public abstract class Animal extends Positionable
 	protected final void move(Time dt)
 	{
 		
-		final Time threshold = Context.getConfig().getTime(Config.ANIMAL_NEXT_ROTATION_DELAY) ; 
+		final Time threshold = getConfig().getTime(ANIMAL_NEXT_ROTATION_DELAY) ; 
 		double deplacement = dt.toSeconds()*(getSpeed());
 		
 		
