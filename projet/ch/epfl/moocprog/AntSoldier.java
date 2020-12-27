@@ -3,6 +3,8 @@ package ch.epfl.moocprog;
 import static ch.epfl.moocprog.app.Context.*;
 import static ch.epfl.moocprog.config.Config.*;
 
+import ch.epfl.moocprog.utils.Time;
+
 public final class AntSoldier extends Ant {
 
 
@@ -28,5 +30,21 @@ public final class AntSoldier extends Ant {
 		// TODO Auto-generated method stub
 		return getConfig().getDouble(ANT_SOLDIER_SPEED);
 	}
+	
+	protected void seekForEnemies(AntEnvironmentView env, Time dt) 
+	{
+		this.move(dt);
+
+	}
+
+
+
+
+	@Override
+	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) 
+	{
+		env.selectSpecificBehaviorDispatch(this,  dt);
+	}
+	
 
 }

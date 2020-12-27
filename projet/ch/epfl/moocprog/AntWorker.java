@@ -5,6 +5,8 @@ import static ch.epfl.moocprog.config.Config.*;
 import static ch.epfl.moocprog.config.Config.TERMITE_HP;
 import static ch.epfl.moocprog.config.Config.TERMITE_LIFESPAN;
 
+import ch.epfl.moocprog.utils.Time;
+
 public final class AntWorker extends Ant 
 {
 	private double foodQuantity;
@@ -38,5 +40,19 @@ public final class AntWorker extends Ant
 		// TODO Auto-generated method stub
 		return getConfig().getDouble(ANT_WORKER_SPEED);
 	}
+	
+	protected void seekForFood(AntWorkerEnvironmentView env, Time dt)
+	{
+		this.move(dt);
+	}
+
+	@Override
+	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) 
+	{
+		env.selectSpecificBehaviorDispatch(this,  dt);
+	}
+	
+	
+
 
 }

@@ -58,20 +58,21 @@ public abstract class Animal extends Positionable
 		return state;
 	}
 	
-	public void update(AnimalEnvironmentView env, Time dt)
+	public final void update(AnimalEnvironmentView env, Time dt)
 	{
 		lifespan = lifespan.minus(dt.times(getConfig().getDouble(ANIMAL_LIFESPAN_DECREASE_FACTOR)));
 		
 		
 		if(!isDead())
 		{
-			move(dt);
+			this.specificBehaviorDispatch(env,dt);
+			//move(dt);
 		}
 
 	}
 	
 	
-	
+	protected abstract void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt);
 	
 	
 	private void rotate()

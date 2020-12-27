@@ -63,8 +63,19 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 	{
 		fg.update(this,  dt);
 		
-		Iterator<Animal> iterateur = animals.iterator();
 		
+		// Gestion des fourmilieres
+		for (Anthill anthill : anthills) {
+			anthill.update(this, dt);
+		}
+		
+		
+		
+		
+		
+		
+		//nettoyage animaux morts
+		Iterator<Animal> iterateur = animals.iterator();
 		while(iterateur.hasNext()) 
 		{
 			Animal instanceDeUneClasse = iterateur.next();
@@ -168,6 +179,20 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		
 		ahill.dropFood(antWorker.getFoodQuantity());
 		return true;
+	}
+
+
+	@Override
+	public void selectSpecificBehaviorDispatch(AntWorker antWorker, Time dt) {
+		antWorker.seekForFood(this, dt);
+		
+	}
+
+
+	@Override
+	public void selectSpecificBehaviorDispatch(AntSoldier antSoldier, Time dt) {
+		antSoldier.seekForEnemies(this, dt);
+
 	}
 
 }
