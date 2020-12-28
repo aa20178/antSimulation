@@ -12,6 +12,7 @@ import java.util.List;
 import ch.epfl.moocprog.gfx.EnvironmentRenderer;
 import ch.epfl.moocprog.utils.Time;
 import ch.epfl.moocprog.utils.Utils;
+import ch.epfl.moocprog.utils.Vec2d;
 
 public final class Environment implements FoodGeneratorEnvironmentView, AnimalEnvironmentView, AnthillEnvironmentView, AntEnvironmentView, AntWorkerEnvironmentView
 {
@@ -20,6 +21,7 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 	private List<Food> foodlist;
 	private List<Animal> animals	;
 	private List<Anthill> anthills	;
+	private List<Pheromone> pheros	;
 
 	public  Environment() 
 	{
@@ -27,6 +29,8 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		foodlist = new LinkedList<Food>();
 		animals = new LinkedList<Animal>();
 		anthills = new LinkedList<Anthill>();
+		pheros = new LinkedList<Pheromone>();
+
 	}
 	
 	
@@ -61,6 +65,40 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		return l;
 	}
 	
+	
+	void cleanPheromones(List<Pheromone> pheroslist){
+		
+		Utils.requireNonNull(pheroslist);
+	//nettoyage pheros negli
+	Iterator<Pheromone> iterateurPheros = pheroslist.iterator();
+	while(iterateurPheros.hasNext()) 
+	{
+		Pheromone instancePhero = iterateurPheros.next();
+		if(instancePhero.isNegligible() ) 
+		{
+			iterateurPheros.remove();
+		}
+		
+	}
+	
+	return ;
+	
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void update(Time dt) 
 	{
 		fg.update(this,  dt);
@@ -72,23 +110,41 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		}
 		
 		
+		//nettoyage pheros negli
+		Iterator<Pheromone> iterateurPheros = pheros.iterator();
+		while(iterateurPheros.hasNext()) 
+		{
+			Pheromone instancePhero = iterateurPheros.next();
+			if(instancePhero.isNegligible() ) 
+			{
+				iterateurPheros.remove();
+			}
+			else
+				instancePhero.update(dt);
+		}
+			
 		
 		
 		
 		
 		//nettoyage animaux morts
-		Iterator<Animal> iterateur = animals.iterator();
-		while(iterateur.hasNext()) 
+		Iterator<Animal> iterateurAnimaux = animals.iterator();
+		while(iterateurAnimaux.hasNext()) 
 		{
-			Animal instanceDeUneClasse = iterateur.next();
-			if(instanceDeUneClasse.isDead() ) 
+			Animal instanceAni = iterateurAnimaux.next();
+			if(instanceAni.isDead() ) 
 			{
-				iterateur.remove();
+				iterateurAnimaux.remove();
 			}
 			else
-				instanceDeUneClasse.update(this, dt);
+				instanceAni.update(this, dt);
 		}
-				
+			
+		
+		
+		
+		
+		
 		foodlist.removeIf(food -> food.getQuantity() <= 0);
 	}
 	
@@ -195,6 +251,79 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 	public void selectSpecificBehaviorDispatch(AntSoldier antSoldier, Time dt) {
 		antSoldier.seekForEnemies(this, dt);
 
+	}
+
+	List<Double> getPheromonesQuantities()
+	{
+		List<Double> l = new ArrayList<Double>();
+		for ( Pheromone ph : pheros)
+		{
+			l.add(ph.getQuantity());
+		}
+		return l;
+	}
+	
+	
+	
+
+	@Override
+	public void addPheromone(Pheromone pheromone)
+	{
+		Utils.requireNonNull(pheromone);			
+		pheros.add(pheromone);
+	}
+
+
+	@Override
+	public double[] getPheromoneQuantitiesPerIntervalForAnt(ToricPosition position, double directionAngleRad,
+			double[] angles)
+	{
+
+		Utils.requireNonNull(angles);
+
+		double[] T = new double[angles.length];
+		double distanceSmell = getConfig().getDouble(ANT_SMELL_MAX_DISTANCE);
+		
+		
+		for (Pheromone pheromone : this.pheros) 
+		{
+			if (!pheromone.isNegligible() && pheromone.getPosition().toricDistance(position) <=distanceSmell )
+			{
+
+				Vec2d v = position.toricVector(pheromone.getPosition());
+				double beta = v.angle() - directionAngleRad;
+				int closestAngleIndex = 0;
+
+				for ( int i = 0 ; i < angles.length ; i ++)
+				{
+					double ecartAlaBorneI = closestAngleFrom(beta, angles[i]);
+					double ecartAlaBorneCourante = closestAngleFrom(beta, angles[closestAngleIndex]);
+					
+					if(ecartAlaBorneI <ecartAlaBorneCourante)
+					{
+						closestAngleIndex = i;
+					}
+				}
+				T[closestAngleIndex] = T[closestAngleIndex] + pheromone.getQuantity();
+				
+			}
+		}
+		return T;
+	}
+	
+	
+	private static double closestAngleFrom(double angle, double target) {
+		double diff = normalizedAngle(angle - target);
+		return Math.min(diff, 2 * Math.PI - diff);
+	}
+	
+	private static double normalizedAngle(double angle) 
+	{
+		while (angle < 0)
+			angle = angle + 2* Math.PI;
+		while (angle >= 2 * Math.PI)
+			angle = angle - 2* Math.PI;
+		return angle;
 	}
 
 }

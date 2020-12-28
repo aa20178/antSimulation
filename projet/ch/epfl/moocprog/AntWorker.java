@@ -39,9 +39,37 @@ public final class AntWorker extends Ant
 		return getConfig().getDouble(ANT_WORKER_SPEED);
 	}
 	
+	public void makeUturn()
+	{	
+		  double angle = this.getDirection(); if(angle + Math.PI > 2*Math.PI) 
+		  {
+			  this.setDirection(angle-Math.PI);
+		  } 
+		  else
+		  	{ this.setDirection(angle+Math.PI);}
+	}
+	
 	protected void seekForFood(AntWorkerEnvironmentView env, Time dt)
 	{
 		this.move(dt);
+		
+		// premier temps
+		Food foodRecoltee = env.getClosestFoodForAnt(this) ;
+		
+		
+		if( (this.foodQuantity == 0) && (foodRecoltee!= null   ))
+		{
+			double antMax = getConfig().getDouble(ANT_MAX_FOOD);
+			this.foodQuantity =	foodRecoltee.takeQuantity(antMax);	
+			this.makeUturn();
+		}
+		
+		if(env.dropFood(this) ==true && this.foodQuantity != 0.0) 
+		{
+			this.foodQuantity = 0.0;
+			this.makeUturn();
+		}
+	
 	}
 
 	@Override
