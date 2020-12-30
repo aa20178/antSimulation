@@ -13,30 +13,51 @@ public abstract class Ant extends Animal
 	
 	private final double energy = getConfig().getDouble(ANT_PHEROMONE_ENERGY);
 	
-
+	protected final RotationProbability computeRotationProbs(AntEnvironmentView env)
+	{
+		return this.computeDefaultRotationProbs();
+	}
+	
+	@Override
+	protected final RotationProbability computeRotationProbsDispatch(AnimalEnvironmentView env)
+	{
+		return env.selectComputeRotationProbsDispatch(this);
+		
+	}
+	
+	
+	
+	
+	
+	
+	protected final void afterMoveDispatch(AnimalEnvironmentView env, Time dt)
+	{
+		env.selectAfterMoveDispatch(this, dt);
+	}
+	
 	final private void spreadPheromones(AntEnvironmentView env)
 	{
+		
 		ToricPosition currentpos = this.getPosition();
-		double d =currentpos.toricDistance(lastPheroPos);
+		double d = currentpos.toricDistance(lastPheroPos);
 		double nombredInstancesDePhero = d*densite;
-		double nipPartieEntiere = Math.floor(d*densite);
 
 		Vec2d v = lastPheroPos.toricVector(currentpos);
+		double distanceEntreChaquePhero = d/nombredInstancesDePhero;
 
-		for (int i = 0 ;i < nipPartieEntiere ; i = i+1 )
+		for (int i = 0 ;i < Math.floor(nombredInstancesDePhero) ; i = i+1 )
 		{
-			ToricPosition pos_i = lastPheroPos.add(v.scalarProduct(i/(nombredInstancesDePhero)));
 			
-			Pheromone pheromone = new Pheromone(pos_i, this.energy);
-			env.addPheromone(pheromone);
-			this.lastPheroPos = currentpos;
 			
 		}
 		
 	
 	}
 
-
+	protected final void afterMoveAnt(AntEnvironmentView env, Time dt)
+	{
+		spreadPheromones(env);
+	}
 	
 	public Ant(ToricPosition t,int hitpoints, Time life, Uid nAntHillId) 
 	{
@@ -51,7 +72,8 @@ public abstract class Ant extends Animal
 		return this.antHillId;
 	}
 	
-	
+
+
 	
 
 

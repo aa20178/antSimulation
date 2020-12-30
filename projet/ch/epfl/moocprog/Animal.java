@@ -75,11 +75,14 @@ public abstract class Animal extends Positionable
 	
 	private void rotate()
 	{
-		double gamma = Utils.pickValue(computeRotationProbs().getAngles(), computeRotationProbs().getProbabilities());
+		double gamma = Utils.pickValue(computeDefaultRotationProbs().getAngles(), computeDefaultRotationProbs().getProbabilities());
 		this.setDirection(getDirection()+ gamma);
 	}
 	
-	protected final void move(Time dt)
+	protected abstract void afterMoveDispatch(AnimalEnvironmentView env, Time dt);
+
+	
+	protected final void move(AnimalEnvironmentView env, Time dt)
 	{
 		
 		final Time threshold = getConfig().getTime(ANIMAL_NEXT_ROTATION_DELAY) ; 
@@ -98,6 +101,7 @@ public abstract class Animal extends Positionable
 		
 		Vec2d vecDir = Vec2d.fromAngle(angleDeDirectionDeDeplacement).scalarProduct(deplacement);
 		this.setPosition(this.getPosition().add(vecDir));
+		afterMoveDispatch(env, dt);
 		
 	}
 	
@@ -108,9 +112,10 @@ public abstract class Animal extends Positionable
 				+String.format("LifeSpan : %.1f", lifespan.toSeconds())+"\n";
 	}
 	
+	protected abstract RotationProbability computeRotationProbsDispatch(AnimalEnvironmentView env);
+
 	
-	
-	protected RotationProbability computeRotationProbs()
+	protected final RotationProbability computeDefaultRotationProbs()
 	{
 		
 		double[] ang =  { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};

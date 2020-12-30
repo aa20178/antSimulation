@@ -278,6 +278,7 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 	public double[] getPheromoneQuantitiesPerIntervalForAnt(ToricPosition position, double directionAngleRad,
 			double[] angles)
 	{
+		Utils.requireNonNull(position);
 
 		Utils.requireNonNull(angles);
 
@@ -324,6 +325,20 @@ public final class Environment implements FoodGeneratorEnvironmentView, AnimalEn
 		while (angle >= 2 * Math.PI)
 			angle = angle - 2* Math.PI;
 		return angle;
+	}
+
+
+	@Override
+	public RotationProbability selectComputeRotationProbsDispatch(Ant ant) {
+		// TODO Auto-generated method stub
+		return ant.computeRotationProbs(this);
+	}
+
+
+	@Override
+	public void selectAfterMoveDispatch(Ant ant, Time dt)
+	{
+		ant.afterMoveAnt(this, dt);
 	}
 
 }

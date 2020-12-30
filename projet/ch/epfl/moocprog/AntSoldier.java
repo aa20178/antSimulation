@@ -19,6 +19,8 @@ public final class AntSoldier extends Ant {
 	{	
 	}
 
+
+	
 	@Override
 	public double getSpeed() {
 		// TODO Auto-generated method stub
@@ -27,7 +29,7 @@ public final class AntSoldier extends Ant {
 	
 	protected void seekForEnemies(AntEnvironmentView env, Time dt) 
 	{
-		this.move(dt);
+		this.move(env,dt);
 
 	}
 

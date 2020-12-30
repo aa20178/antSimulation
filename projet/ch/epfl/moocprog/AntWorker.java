@@ -51,12 +51,10 @@ public final class AntWorker extends Ant
 	
 	protected void seekForFood(AntWorkerEnvironmentView env, Time dt)
 	{
-		this.move(dt);
+		this.move(env, dt);
 		
 		// premier temps
 		Food foodRecoltee = env.getClosestFoodForAnt(this) ;
-		
-		
 		if( (this.foodQuantity == 0) && (foodRecoltee!= null   ))
 		{
 			double antMax = getConfig().getDouble(ANT_MAX_FOOD);
@@ -69,7 +67,6 @@ public final class AntWorker extends Ant
 			this.foodQuantity = 0.0;
 			this.makeUturn();
 		}
-	
 	}
 
 	@Override
